@@ -14,8 +14,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public abstract class RecyclerViewAdapter<T> extends ListAdapter<T, RecyclerViewAdapter<T>.Holder> {
 
-    private OnItemLongClickListener<T> longClickListener;
-
     protected RecyclerViewAdapter() {
         super(new DiffCallback<>());
         registerAdapterDataObserver(new ItemCountObserver());
@@ -34,24 +32,12 @@ public abstract class RecyclerViewAdapter<T> extends ListAdapter<T, RecyclerView
         T currentItem = getItem(position);
         holder.bind(currentItem);
         holder.itemView.setOnClickListener(v -> onItemClick(currentItem));
-
-        // Setting the long click listener
-        if (longClickListener != null) {
-            holder.itemView.setOnLongClickListener(v -> {
-                longClickListener.onItemLongClick(currentItem);
-                return true;
-            });
-        }
     }
 
     protected abstract int getLayoutResourceId();
     protected abstract int getBindingVariableId();
     protected abstract void onItemClick(T item);
     protected abstract void onAdapterDataChanged(int itemCount);
-
-    public void setOnItemLongClickListener(OnItemLongClickListener<T> listener) {
-        this.longClickListener = listener;
-    }
 
     public class Holder extends RecyclerView.ViewHolder {
 
