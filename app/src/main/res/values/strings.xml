@@ -314,4 +314,8 @@
 
     <string name="raspberries">Raspberries</string>
     <string name="raspberries_terms">raspberries</string>
+
+    <!-- Grocery List -->
+    <string name="title_grocery_list">Grocery List</string>
+    <string name="empty_grocery_list_prompt">Wunderbare Einkaufsliste</string>
 </resources>

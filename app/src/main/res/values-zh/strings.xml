@@ -245,4 +245,6 @@
     <string name="blueberries_terms">蓝莓</string>
     <string name="raspberries">树莓</string>
     <string name="raspberries_terms">树莓</string>
+    <string name="title_grocery_list">Grocery List</string>
+    <string name="empty_grocery_list_prompt">Wunderbare Einkaufsliste</string>
 </resources>

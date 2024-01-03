@@ -228,4 +228,6 @@
     <string name="turkish">Turco</string>
     <string name="serbian_latin">Serbio (latín)</string>
     <string name="hebrew">Hebreo</string>
+    <string name="title_grocery_list">Grocery List</string>
+    <string name="empty_grocery_list_prompt">Wunderbare Einkaufsliste</string>
 </resources>

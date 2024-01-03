@@ -245,4 +245,6 @@
     <string name="blueberries_terms">mirtillo, mirtilli</string>
     <string name="raspberries">Lamponi</string>
     <string name="raspberries_terms">lampone, lamponi</string>
+    <string name="title_grocery_list">Grocery List</string>
+    <string name="empty_grocery_list_prompt">Wunderbare Einkaufsliste</string>
 </resources>
