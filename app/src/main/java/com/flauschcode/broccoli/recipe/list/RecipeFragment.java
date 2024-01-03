@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.activity.result.ActivityResultLauncher;
@@ -29,7 +30,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.flauschcode.broccoli.BR;
 import com.flauschcode.broccoli.R;
-import com.flauschcode.broccoli.RecyclerViewAdapter;
+import com.flauschcode.broccoli.SelectableRecyclerViewAdapter;
 import com.flauschcode.broccoli.category.Category;
 import com.flauschcode.broccoli.recipe.Recipe;
 import com.flauschcode.broccoli.recipe.crud.CreateAndEditRecipeActivity;
@@ -68,7 +69,7 @@ public class RecipeFragment extends Fragment implements AdapterView.OnItemSelect
         recyclerView.setHasFixedSize(true);
 
         View emptyMessageLayout = root.findViewById(R.id.recipes_empty);
-        ListAdapter<Recipe, RecyclerViewAdapter<Recipe>.Holder> adapter = new RecyclerViewAdapter<Recipe>() {
+        ListAdapter<Recipe, SelectableRecyclerViewAdapter<Recipe>.Holder> adapter = new SelectableRecyclerViewAdapter<Recipe>() {
             @Override
             protected int getLayoutResourceId() {
                 return R.layout.recipe_item;
@@ -82,6 +83,12 @@ public class RecipeFragment extends Fragment implements AdapterView.OnItemSelect
             @Override
             protected void onItemClick(Recipe item) {
                 onListInteraction(item);
+            }
+
+            @Override
+            protected void onItemLongClick(Recipe item, int position) {
+                //Toast.makeText(getContext(), "Long clicked: " + item.getTitle().substring(0, 10) + " position: " + position, Toast.LENGTH_SHORT).show();
+                toggleSelection(position);
             }
 
             @Override
