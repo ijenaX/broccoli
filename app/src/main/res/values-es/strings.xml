@@ -225,4 +225,6 @@
     <string name="open_source_licenses_text">Detalles de licencia para software de código abierto</string>
     <string name="polish">Polaco</string>
     <string name="chinese">Chino</string>
+    <string name="title_grocery_list">Grocery List</string>
+    <string name="empty_grocery_list_prompt">Wunderbare Einkaufsliste</string>
 </resources>

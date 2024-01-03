@@ -16,6 +16,11 @@
         <item android:id="@+id/nav_seasons"
             android:icon="@drawable/ic_eco_24"
             android:title="@string/seasonal_calendar" />
+        <item
+            android:id="@+id/nav_grocery_list"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:title="@string/title_grocery_list" />
 
     </group>
 

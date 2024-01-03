@@ -242,4 +242,6 @@
     <string name="blueberries_terms">jagoda, jagody, jagód</string>
     <string name="raspberries">Maliny</string>
     <string name="raspberries_terms">malina, maliny, malin</string>
+    <string name="title_grocery_list">Grocery List</string>
+    <string name="empty_grocery_list_prompt">Wunderbare Einkaufsliste</string>
 </resources>
