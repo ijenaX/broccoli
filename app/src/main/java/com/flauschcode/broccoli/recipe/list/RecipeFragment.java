@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.activity.result.ActivityResultLauncher;
@@ -29,7 +28,6 @@ import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.flauschcode.broccoli.BR;
-import com.flauschcode.broccoli.OnItemLongClickListener;
 import com.flauschcode.broccoli.R;
 import com.flauschcode.broccoli.RecyclerViewAdapter;
 import com.flauschcode.broccoli.category.Category;
@@ -46,7 +44,7 @@ import javax.inject.Inject;
 
 import dagger.android.support.AndroidSupportInjection;
 
-public class RecipeFragment extends Fragment implements AdapterView.OnItemSelectedListener, SearchView.OnQueryTextListener, OnItemLongClickListener<Recipe> {
+public class RecipeFragment extends Fragment implements AdapterView.OnItemSelectedListener, SearchView.OnQueryTextListener {
 
     @Inject
     ViewModelProvider.Factory viewModelFactory;
@@ -70,7 +68,7 @@ public class RecipeFragment extends Fragment implements AdapterView.OnItemSelect
         recyclerView.setHasFixedSize(true);
 
         View emptyMessageLayout = root.findViewById(R.id.recipes_empty);
-        RecyclerViewAdapter<Recipe> adapter = new RecyclerViewAdapter<Recipe>() {
+        ListAdapter<Recipe, RecyclerViewAdapter<Recipe>.Holder> adapter = new RecyclerViewAdapter<Recipe>() {
             @Override
             protected int getLayoutResourceId() {
                 return R.layout.recipe_item;
@@ -91,7 +89,6 @@ public class RecipeFragment extends Fragment implements AdapterView.OnItemSelect
                 emptyMessageLayout.setVisibility(itemCount == 0? View.VISIBLE : View.GONE);
             }
         };
-        adapter.setOnItemLongClickListener(this);
         recyclerView.setAdapter(adapter);
 
         FloatingActionButton fab = root.findViewById(R.id.fab_recipes);
@@ -185,11 +182,6 @@ public class RecipeFragment extends Fragment implements AdapterView.OnItemSelect
         return false;
     }
 
-    @Override
-    public void onItemLongClick(Recipe recipe) {
-        Toast.makeText(getContext(), "Long clicked: " + recipe.getTitle(), Toast.LENGTH_SHORT).show();
-    }
-
     ActivityResultLauncher<Intent> detailsResultLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             result -> {
@@ -204,7 +196,6 @@ public class RecipeFragment extends Fragment implements AdapterView.OnItemSelect
             });
 
     private void onListInteraction(Recipe recipe) {
-        //TODO select mode
         Intent intent = new Intent(getContext(), RecipeDetailsActivity.class);
         intent.putExtra(Recipe.class.getName(), recipe);
         detailsResultLauncher.launch(intent);
