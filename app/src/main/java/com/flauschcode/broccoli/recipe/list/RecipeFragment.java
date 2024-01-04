@@ -29,6 +29,7 @@ import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.flauschcode.broccoli.BR;
+import com.flauschcode.broccoli.OnSelectionStateChangeListener;
 import com.flauschcode.broccoli.R;
 import com.flauschcode.broccoli.SelectableRecyclerViewAdapter;
 import com.flauschcode.broccoli.category.Category;
@@ -45,7 +46,7 @@ import javax.inject.Inject;
 
 import dagger.android.support.AndroidSupportInjection;
 
-public class RecipeFragment extends Fragment implements AdapterView.OnItemSelectedListener, SearchView.OnQueryTextListener {
+public class RecipeFragment extends Fragment implements OnSelectionStateChangeListener, AdapterView.OnItemSelectedListener, SearchView.OnQueryTextListener {
 
     @Inject
     ViewModelProvider.Factory viewModelFactory;
@@ -56,6 +57,7 @@ public class RecipeFragment extends Fragment implements AdapterView.OnItemSelect
     private SearchView searchView;
     private Spinner spinner;
     private Chip seasonalIngredientChip;
+    private Boolean isMultiselectMode = false;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -69,7 +71,7 @@ public class RecipeFragment extends Fragment implements AdapterView.OnItemSelect
         recyclerView.setHasFixedSize(true);
 
         View emptyMessageLayout = root.findViewById(R.id.recipes_empty);
-        ListAdapter<Recipe, SelectableRecyclerViewAdapter<Recipe>.Holder> adapter = new SelectableRecyclerViewAdapter<Recipe>() {
+        SelectableRecyclerViewAdapter<Recipe> adapter = new SelectableRecyclerViewAdapter<Recipe>() {
             @Override
             protected int getLayoutResourceId() {
                 return R.layout.recipe_item;
@@ -81,14 +83,19 @@ public class RecipeFragment extends Fragment implements AdapterView.OnItemSelect
             }
 
             @Override
-            protected void onItemClick(Recipe item) {
-                onListInteraction(item);
+            protected void onItemClick(Recipe item, int position) {
+                if (isMultiselectMode) {
+                    toggleSelection(position);
+                } else {
+                    onListInteraction(item);
+                }
             }
 
             @Override
             protected void onItemLongClick(Recipe item, int position) {
-                //Toast.makeText(getContext(), "Long clicked: " + item.getTitle().substring(0, 10) + " position: " + position, Toast.LENGTH_SHORT).show();
                 toggleSelection(position);
+                //Toast.makeText(getContext(), "Long clicked: " + item.getTitle().substring(0, 10) + " position: " + position, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getContext(), "Multiselect mode: " + RecipeFragment.this.isMultiselectMode, Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -96,6 +103,7 @@ public class RecipeFragment extends Fragment implements AdapterView.OnItemSelect
                 emptyMessageLayout.setVisibility(itemCount == 0? View.VISIBLE : View.GONE);
             }
         };
+        adapter.setOnSelectionStateChangeListener(this);
         recyclerView.setAdapter(adapter);
 
         FloatingActionButton fab = root.findViewById(R.id.fab_recipes);
@@ -189,6 +197,18 @@ public class RecipeFragment extends Fragment implements AdapterView.OnItemSelect
         return false;
     }
 
+    @Override
+    public void onSelectionStateChanged(boolean isMultiSelectMode) {
+        this.isMultiselectMode = isMultiSelectMode;
+        Toolbar toolbar = requireActivity().findViewById(R.id.toolbar_recipes);
+        if (toolbar != null) {
+            MenuItem kebabMenuItem = toolbar.getMenu().findItem(R.id.action_kebab_menu);
+            if (kebabMenuItem != null) {
+                kebabMenuItem.setVisible(isMultiSelectMode);
+            }
+        }
+    }
+
     ActivityResultLauncher<Intent> detailsResultLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             result -> {
@@ -242,12 +262,25 @@ public class RecipeFragment extends Fragment implements AdapterView.OnItemSelect
     private void setUpMenu(Toolbar toolbar) {
         toolbar.inflateMenu(R.menu.recipes);
         searchItem = toolbar.getMenu().findItem(R.id.action_search);
+        MenuItem kebabMenuItem = toolbar.getMenu().findItem(R.id.action_kebab_menu);
+
+        // Set up search view
         searchView = new SearchView(toolbar.getContext());
         searchView.setMaxWidth(Integer.MAX_VALUE);
         searchView.setMinimumHeight(requireContext().getResources().getDimensionPixelSize(R.dimen.min_height_for_accessibility));
         searchItem.setActionView(searchView);
         viewModel.getFilterName().observe(getViewLifecycleOwner(), filterName -> searchView.setQueryHint(getString(R.string.search_in, filterName.toUpperCase())));
         searchView.setOnQueryTextListener(this);
+
+        // Update kebab menu visibility based on multi-select mode
+        kebabMenuItem.setVisible(isMultiselectMode);
+
+        // Handle kebab menu item clicks
+        kebabMenuItem.setOnMenuItemClickListener(item -> {
+            // Implement actions like "Add to grocery list" and "Delete"
+            // ...
+            return true;
+        });
     }
 
     private void setUpSpinner() {

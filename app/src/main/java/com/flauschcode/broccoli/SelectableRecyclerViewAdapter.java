@@ -22,6 +22,8 @@ public abstract class SelectableRecyclerViewAdapter<T> extends ListAdapter<T, Se
 
     private HashSet<Integer> selectedItems = new HashSet<>();
 
+    private OnSelectionStateChangeListener selectionStateChangeListener;
+
     protected SelectableRecyclerViewAdapter() {
         super(new DiffCallback<>());
         registerAdapterDataObserver(new ItemCountObserver());
@@ -42,7 +44,7 @@ public abstract class SelectableRecyclerViewAdapter<T> extends ListAdapter<T, Se
         holder.bind(currentItem, isSelected);
 
         // Set click listeners
-        holder.itemView.setOnClickListener(v -> onItemClick(currentItem));
+        holder.itemView.setOnClickListener(v -> onItemClick(currentItem, position));
         holder.itemView.setOnLongClickListener(v -> {
             onItemLongClick(currentItem, position);
             return true;
@@ -57,11 +59,18 @@ public abstract class SelectableRecyclerViewAdapter<T> extends ListAdapter<T, Se
             selectedItems.add(position);
         }
         notifyItemChanged(position);
+
+        if (selectionStateChangeListener != null) {
+            selectionStateChangeListener.onSelectionStateChanged(!selectedItems.isEmpty());
+        }
+    }
+    public HashSet<Integer> getSelectedItems() {
+        return selectedItems;
     }
 
     protected abstract int getLayoutResourceId();
     protected abstract int getBindingVariableId();
-    protected abstract void onItemClick(T item);
+    protected abstract void onItemClick(T item, int position);
     protected abstract void onItemLongClick(T item, int position);
     protected abstract void onAdapterDataChanged(int itemCount);
 
@@ -80,6 +89,10 @@ public abstract class SelectableRecyclerViewAdapter<T> extends ListAdapter<T, Se
             checkBoxSelected.setVisibility(isSelected ? View.VISIBLE : View.INVISIBLE);
             binding.executePendingBindings();
         }
+    }
+
+    public void setOnSelectionStateChangeListener(OnSelectionStateChangeListener listener) {
+        this.selectionStateChangeListener = listener;
     }
 
     public static class DiffCallback<T> extends DiffUtil.ItemCallback<T> {
@@ -131,3 +144,4 @@ public abstract class SelectableRecyclerViewAdapter<T> extends ListAdapter<T, Se
         }
     }
 }
+
