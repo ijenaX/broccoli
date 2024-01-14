@@ -60,19 +60,20 @@ public class GroceryListFragment extends Fragment implements OnSelectionStateCha
                 Holder viewHolder = (Holder) recyclerView.findViewHolderForAdapterPosition(position);
 
                 if (viewHolder != null) {
-                    TextView titleTextView = viewHolder.itemView.findViewById(R.id.ingredient_info);
+                    TextView quantityTextView = viewHolder.itemView.findViewById(R.id.ingredient_quantity);
+                    TextView textTextView = viewHolder.itemView.findViewById(R.id.ingredient_quantity);
 
-                    if (titleTextView != null) {
-                        int paintFlags = titleTextView.getPaintFlags();
+                    if (textTextView == null) { return; }
 
-                        if ((paintFlags & Paint.STRIKE_THRU_TEXT_FLAG) != 0) {
-                            paintFlags &= ~Paint.STRIKE_THRU_TEXT_FLAG;
-                        } else {
-                            paintFlags |= Paint.STRIKE_THRU_TEXT_FLAG;
-                        }
-
-                        titleTextView.setPaintFlags(paintFlags);
-                    }
+//                    if (item.isInCart()) {
+//                        quantityTextView.setPaintFlags(~Paint.STRIKE_THRU_TEXT_FLAG);
+//                        textTextView.setPaintFlags(~Paint.STRIKE_THRU_TEXT_FLAG);
+//                        item.setInCart(false);
+//                    } else {
+//                        quantityTextView.setPaintFlags(Paint.STRIKE_THRU_TEXT_FLAG);
+//                        textTextView.setPaintFlags(Paint.STRIKE_THRU_TEXT_FLAG);
+//                        item.setInCart(true);
+//                    }
                 }
             }
 
