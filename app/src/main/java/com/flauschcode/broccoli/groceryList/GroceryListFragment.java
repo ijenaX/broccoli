@@ -101,7 +101,7 @@ public class GroceryListFragment extends Fragment implements OnSelectionStateCha
     }
 
     @Override
-    public void onSelectionStateChanged(boolean isMultiSelectMode) {
+    public void onSelectionStateChanged(List<?> selectedItems) {
 
     }
 }
