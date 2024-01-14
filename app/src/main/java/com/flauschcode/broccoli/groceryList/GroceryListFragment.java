@@ -1,25 +1,24 @@
 package com.flauschcode.broccoli.groceryList;
 
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.flauschcode.broccoli.BR;
+import com.flauschcode.broccoli.OnSelectionStateChangeListener;
 import com.flauschcode.broccoli.R;
-import com.flauschcode.broccoli.RecyclerViewAdapter;
-import com.flauschcode.broccoli.category.Category;
-import com.flauschcode.broccoli.category.CategoryDialog;
-import com.flauschcode.broccoli.category.CategoryViewModel;
-import com.flauschcode.broccoli.recipe.Recipe;
+import com.flauschcode.broccoli.SelectableRecyclerViewAdapter;
 import com.flauschcode.broccoli.recipe.ingredients.Ingredient;
 
 import java.util.ArrayList;
@@ -27,7 +26,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-public class GroceryListFragment extends Fragment {
+public class GroceryListFragment extends Fragment implements OnSelectionStateChangeListener {
 
     @Inject
     ViewModelProvider.Factory viewModelFactory;
@@ -43,11 +42,9 @@ public class GroceryListFragment extends Fragment {
         recyclerView.setHasFixedSize(true);
         recyclerView.addItemDecoration(new DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL));
 
-        List<Ingredient> testData = generateTestData();
-
         View emptyMessageTextView = root.findViewById(R.id.text_view);
 
-        RecyclerViewAdapter<Ingredient> adapter = new RecyclerViewAdapter<Ingredient>() {
+        SelectableRecyclerViewAdapter<Ingredient> adapter = new SelectableRecyclerViewAdapter<Ingredient>() {
             @Override
             protected int getLayoutResourceId() {
                 return R.layout.grocery_item;
@@ -59,31 +56,52 @@ public class GroceryListFragment extends Fragment {
             }
 
             @Override
-            protected void onItemClick(Ingredient item) {
+            protected void onItemClick(Ingredient item, int position) {
+                Holder viewHolder = (Holder) recyclerView.findViewHolderForAdapterPosition(position);
+
+                if (viewHolder != null) {
+                    TextView titleTextView = viewHolder.itemView.findViewById(R.id.ingredient_info);
+
+                    if (titleTextView != null) {
+                        int paintFlags = titleTextView.getPaintFlags();
+
+                        if ((paintFlags & Paint.STRIKE_THRU_TEXT_FLAG) != 0) {
+                            paintFlags &= ~Paint.STRIKE_THRU_TEXT_FLAG;
+                        } else {
+                            paintFlags |= Paint.STRIKE_THRU_TEXT_FLAG;
+                        }
+
+                        titleTextView.setPaintFlags(paintFlags);
+                    }
+                }
+            }
+
+            @Override
+            protected void onItemLongClick(Ingredient item, int position) {
             }
 
             @Override
             protected void onAdapterDataChanged(int itemCount) {
+                emptyMessageTextView.setVisibility(itemCount == 0? View.VISIBLE : View.GONE);
             }
         };
+        adapter.setOnSelectionStateChangeListener(this);
         recyclerView.setAdapter(adapter);
-        //GroceryListViewModel viewModel = new ViewModelProvider(this, viewModelFactory).get(GroceryListViewModel.class);
         adapter.submitList(generateTestData());
 
         return root;
     }
 
-    public void onListInteraction(Category category) {
-        CategoryDialog.newInstance(category).show(getParentFragmentManager(), "CategoryDialogFragment");
+    private List<Ingredient> generateTestData() {
+        List<Ingredient> testData = new ArrayList<>();
+        testData.add(new Ingredient("100 g", "Zutat 1"));
+        testData.add(new Ingredient("200 g", "Zutat 2"));
+        testData.add(new Ingredient("300 g", "Zutat 3"));
+        return testData;
     }
 
-    private List<Ingredient> generateTestData() {
-        // Hier kannst du deine Testdaten erstellen
-        List<Ingredient> testData = new ArrayList<>();
-        testData.add(new Ingredient("Zutat 1", "100 g"));
-        testData.add(new Ingredient("Zutat 2", "200 g"));
-        testData.add(new Ingredient("Zutat 3", "300 g"));
-        // Füge weitere Testdaten hinzu, wie benötigt
-        return testData;
+    @Override
+    public void onSelectionStateChanged(boolean isMultiSelectMode) {
+
     }
 }
