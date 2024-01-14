@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
@@ -15,29 +16,16 @@
         android:padding="@dimen/text_margin">
 
         <TextView
-            android:id="@+id/ingredient_quantity"
+            android:id="@+id/ingredient_info"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toStartOf="@id/ingredient_text"
+            app:layout_constraintEnd_toStartOf="@id/ingredient_seasonal_icon"
             app:layout_constraintHorizontal_bias="0"
             app:layout_constraintHorizontal_chainStyle="packed"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:text="@{ingredient.quantity}"/>
-
-        <TextView
-            android:id="@+id/ingredient_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            app:layout_constrainedWidth="true"
-            app:layout_constraintEnd_toStartOf="@id/ingredient_seasonal_icon"
-            app:layout_constraintHorizontal_chainStyle="packed"
-            app:layout_constraintStart_toEndOf="@id/ingredient_quantity"
-            app:layout_constraintTop_toTopOf="parent"
-            android:text="@{ingredient.text}"/>
+            android:text="@{ingredient.quantity + ' ' + ingredient.text}"/>
 
         <ImageView
             android:id="@+id/ingredient_seasonal_icon"
@@ -49,9 +37,23 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_chainStyle="packed"
-            app:layout_constraintStart_toEndOf="@id/ingredient_text"
+            app:layout_constraintStart_toEndOf="@id/ingredient_info"
             app:layout_constraintTop_toTopOf="parent"
             app:tint="?attr/colorPrimary" />
+
+        <CheckBox
+            android:id="@+id/checkBox_selected"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="32dp"
+            android:checked="true"
+            android:clickable="false"
+            android:focusable="false"
+            android:padding="8dp"
+            android:visibility="visible"
+            app:layout_constraintStart_toEndOf="@+id/ingredient_seasonal_icon"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
