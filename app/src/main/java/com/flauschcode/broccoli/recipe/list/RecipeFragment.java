@@ -25,7 +25,6 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.flauschcode.broccoli.BR;
@@ -40,6 +39,8 @@ import com.flauschcode.broccoli.seasons.SeasonalFood;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import javax.inject.Inject;
@@ -57,7 +58,7 @@ public class RecipeFragment extends Fragment implements OnSelectionStateChangeLi
     private SearchView searchView;
     private Spinner spinner;
     private Chip seasonalIngredientChip;
-    private Boolean isMultiselectMode = false;
+    private List<Recipe> selectedRecipes = new ArrayList<>();;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -84,10 +85,10 @@ public class RecipeFragment extends Fragment implements OnSelectionStateChangeLi
 
             @Override
             protected void onItemClick(Recipe item, int position) {
-                if (isMultiselectMode) {
-                    toggleSelection(position);
-                } else {
+                if (selectedRecipes.isEmpty()) {
                     onListInteraction(item);
+                } else {
+                    toggleSelection(position);
                 }
             }
 
@@ -198,14 +199,15 @@ public class RecipeFragment extends Fragment implements OnSelectionStateChangeLi
     }
 
     @Override
-    public void onSelectionStateChanged(boolean isMultiSelectMode) {
-        this.isMultiselectMode = isMultiSelectMode;
+    public void onSelectionStateChanged(List<?> selectedItems) {
+        this.selectedRecipes = (List<Recipe>) selectedItems; // Assuming selectedRecipes is a member variable
         Toolbar toolbar = requireActivity().findViewById(R.id.toolbar_recipes);
         if (toolbar != null) {
-            MenuItem kebabMenuItem = toolbar.getMenu().findItem(R.id.action_kebab_menu);
-            if (kebabMenuItem != null) {
-                kebabMenuItem.setVisible(isMultiSelectMode);
-            }
+            MenuItem addToGroceryList = toolbar.getMenu().findItem(R.id.action_add_to_grocery_list);
+            MenuItem deleteRecipes = toolbar.getMenu().findItem(R.id.action_delete);
+            boolean isMultiSelectMode = !selectedItems.isEmpty();
+            addToGroceryList.setVisible(isMultiSelectMode);
+            deleteRecipes.setVisible(isMultiSelectMode);
         }
     }
 
@@ -262,7 +264,9 @@ public class RecipeFragment extends Fragment implements OnSelectionStateChangeLi
     private void setUpMenu(Toolbar toolbar) {
         toolbar.inflateMenu(R.menu.recipes);
         searchItem = toolbar.getMenu().findItem(R.id.action_search);
-        MenuItem kebabMenuItem = toolbar.getMenu().findItem(R.id.action_kebab_menu);
+        MenuItem addToGroceryList = toolbar.getMenu().findItem(R.id.action_add_to_grocery_list);
+        MenuItem deleteRecipes = toolbar.getMenu().findItem(R.id.action_delete);
+
 
         // Set up search view
         searchView = new SearchView(toolbar.getContext());
@@ -273,12 +277,18 @@ public class RecipeFragment extends Fragment implements OnSelectionStateChangeLi
         searchView.setOnQueryTextListener(this);
 
         // Update kebab menu visibility based on multi-select mode
-        kebabMenuItem.setVisible(isMultiselectMode);
+        addToGroceryList.setVisible(!selectedRecipes.isEmpty());
+        deleteRecipes.setVisible(!selectedRecipes.isEmpty());
 
-        // Handle kebab menu item clicks
-        kebabMenuItem.setOnMenuItemClickListener(item -> {
-            // Implement actions like "Add to grocery list" and "Delete"
-            // ...
+        // Set onClick Listener for "Add to grocery list"
+        addToGroceryList.setOnMenuItemClickListener(item -> {
+            Toast.makeText(getContext(), "Selected recipes: " + selectedRecipes.size(), Toast.LENGTH_LONG).show();
+            return true;
+        });
+
+        // Set onClick Listener for "Delete"
+        deleteRecipes.setOnMenuItemClickListener(item -> {
+            Toast.makeText(getContext(), "Selected recipes: " + selectedRecipes.size(), Toast.LENGTH_LONG).show();
             return true;
         });
     }

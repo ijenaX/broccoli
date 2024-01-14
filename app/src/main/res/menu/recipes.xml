@@ -10,9 +10,15 @@
         app:showAsAction="ifRoom|collapseActionView" />
 
     <item
-        android:id="@+id/action_kebab_menu"
-        android:icon="@drawable/ic_arrow_drop_down_24dp"
-        android:title="IDK"
+        android:id="@+id/action_add_to_grocery_list"
+        android:title="Add to grocery list"
         android:visible="false"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_delete"
+        android:title="Delete"
+        android:visible="false"
+        app:showAsAction="never" />
+
 </menu>
