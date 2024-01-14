@@ -16,7 +16,9 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 
 public abstract class SelectableRecyclerViewAdapter<T> extends ListAdapter<T, SelectableRecyclerViewAdapter<T>.Holder> {
 
@@ -61,11 +63,12 @@ public abstract class SelectableRecyclerViewAdapter<T> extends ListAdapter<T, Se
         notifyItemChanged(position);
 
         if (selectionStateChangeListener != null) {
-            selectionStateChangeListener.onSelectionStateChanged(!selectedItems.isEmpty());
+            List<T> selectedItemsList = new ArrayList<>();
+            for (Integer i : selectedItems) {
+                selectedItemsList.add(getItem(i));
+            }
+            selectionStateChangeListener.onSelectionStateChanged(selectedItemsList);
         }
-    }
-    public HashSet<Integer> getSelectedItems() {
-        return selectedItems;
     }
 
     protected abstract int getLayoutResourceId();

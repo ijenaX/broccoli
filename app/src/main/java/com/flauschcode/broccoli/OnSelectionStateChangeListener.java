@@ -1,5 +1,7 @@
 package com.flauschcode.broccoli;
 
+import java.util.List;
+
 public interface OnSelectionStateChangeListener {
-    void onSelectionStateChanged(boolean isMultiSelectMode);
+    void onSelectionStateChanged(List<?> selectedItems);
 }
