@@ -32,9 +32,13 @@ import com.flauschcode.broccoli.OnSelectionStateChangeListener;
 import com.flauschcode.broccoli.R;
 import com.flauschcode.broccoli.SelectableRecyclerViewAdapter;
 import com.flauschcode.broccoli.category.Category;
+import com.flauschcode.broccoli.groceryList.GroceryIngredient;
+import com.flauschcode.broccoli.groceryList.GroceryIngredientRepository;
 import com.flauschcode.broccoli.recipe.Recipe;
 import com.flauschcode.broccoli.recipe.crud.CreateAndEditRecipeActivity;
 import com.flauschcode.broccoli.recipe.details.RecipeDetailsActivity;
+import com.flauschcode.broccoli.recipe.ingredients.Ingredient;
+import com.flauschcode.broccoli.recipe.ingredients.IngredientBuilder;
 import com.flauschcode.broccoli.seasons.SeasonalFood;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -52,6 +56,8 @@ public class RecipeFragment extends Fragment implements OnSelectionStateChangeLi
     @Inject
     ViewModelProvider.Factory viewModelFactory;
 
+    @Inject
+    GroceryIngredientRepository groceryIngredientRepository;
     private RecipeViewModel viewModel;
 
     private MenuItem searchItem;
@@ -282,7 +288,21 @@ public class RecipeFragment extends Fragment implements OnSelectionStateChangeLi
 
         // Set onClick Listener for "Add to grocery list"
         addToGroceryList.setOnMenuItemClickListener(item -> {
-            Toast.makeText(getContext(), "Selected recipes: " + selectedRecipes.size(), Toast.LENGTH_LONG).show();
+            List<GroceryIngredient> groceryIngredients = new ArrayList<>();
+            for (Recipe recipe : selectedRecipes) {
+                // Assuming Recipe has a method getIngredients() that returns a list of Ingredient objects
+                List<Ingredient> ingredients = IngredientBuilder.from(recipe.getIngredients());
+                for (Ingredient ingredient : ingredients) {
+                    groceryIngredients.add(new GroceryIngredient(ingredient, recipe.getRecipeId(), false));
+                }
+            }
+
+            // Store in database
+            groceryIngredients.forEach(groceryIngredient ->
+                    groceryIngredientRepository.insertOrUpdate(groceryIngredient)
+            );
+
+            Toast.makeText(getContext(), "Added to grocery list: " + groceryIngredients.size(), Toast.LENGTH_LONG).show();
             return true;
         });
 

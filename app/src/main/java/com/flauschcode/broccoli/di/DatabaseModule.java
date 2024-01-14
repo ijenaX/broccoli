@@ -7,6 +7,7 @@ import androidx.room.Room;
 import com.flauschcode.broccoli.BroccoliDatabase;
 import com.flauschcode.broccoli.category.CategoryDAO;
 import com.flauschcode.broccoli.recipe.RecipeDAO;
+import com.flauschcode.broccoli.groceryList.GroceryIngredientDAO;
 
 import javax.inject.Singleton;
 
@@ -43,4 +44,9 @@ public class DatabaseModule {
         return database.getCategoryDAO();
     }
 
+    @Provides
+    @Singleton
+    GroceryIngredientDAO provideGroceryIngredientDAO(BroccoliDatabase database) {
+        return database.getGroceryIngredientDAO();
+    }
 }
