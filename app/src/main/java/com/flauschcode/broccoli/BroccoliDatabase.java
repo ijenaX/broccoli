@@ -32,7 +32,8 @@ public abstract class BroccoliDatabase extends RoomDatabase {
     public static synchronized BroccoliDatabase get(Context context) {
         if (broccoliDatabase == null) {
             broccoliDatabase = Room.databaseBuilder(context.getApplicationContext(), BroccoliDatabase.class, "broccoli")
-                                    .build();
+                    .addMigrations(DatabaseMigrations.MIGRATION_1_2)
+                    .build();
         }
         return broccoliDatabase;
     }
