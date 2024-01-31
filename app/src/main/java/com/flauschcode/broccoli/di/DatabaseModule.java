@@ -5,6 +5,7 @@ import android.app.Application;
 import androidx.room.Room;
 
 import com.flauschcode.broccoli.BroccoliDatabase;
+import com.flauschcode.broccoli.DatabaseMigrations;
 import com.flauschcode.broccoli.category.CategoryDAO;
 import com.flauschcode.broccoli.recipe.RecipeDAO;
 import com.flauschcode.broccoli.groceryList.GroceryIngredientDAO;
@@ -23,6 +24,7 @@ public class DatabaseModule {
 
     public DatabaseModule(Application application) {
         database = Room.databaseBuilder(application, BroccoliDatabase.class, DB_NAME)
+                .addMigrations(DatabaseMigrations.MIGRATION_1_2)
                 .build();
     }
 
