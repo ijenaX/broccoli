@@ -15,6 +15,6 @@ public class IngredientTypeConverter {
 
     @TypeConverter
     public static String fromIngredient(Ingredient ingredient) {
-        return ingredient == null ? "" : ingredient.toString();
+        return ingredient == null ? "" : ingredient.getQuantity() + ingredient.getText();
     }
 }

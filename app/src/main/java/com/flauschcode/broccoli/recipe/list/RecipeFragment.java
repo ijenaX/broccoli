@@ -303,13 +303,14 @@ public class RecipeFragment extends Fragment implements OnSelectionStateChangeLi
                     groceryIngredientRepository.insertOrUpdate(groceryIngredient)
             );
 
-            //groceryIngredientRepository.findAll().observe(getViewLifecycleOwner(), new Observer<List<GroceryIngredient>>() {
-//
+            // groceryIngredientRepository.findAll().observe(getViewLifecycleOwner(), new Observer<List<GroceryIngredient>>() {
             //    @Override
             //    public void onChanged(List<GroceryIngredient> groceryIngredients) {
-            //        int bla = 1+2;
+            //        for(GroceryIngredient groceryIngredient: groceryIngredients){
+            //            groceryIngredientRepository.delete(groceryIngredient);
+            //        }
             //    }
-            //});
+            // });
 
             Toast.makeText(getContext(), "Added to grocery list: " + groceryIngredients.size(), Toast.LENGTH_LONG).show();
             return true;
