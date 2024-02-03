@@ -55,7 +55,7 @@ public class GroceryListFragment extends Fragment implements OnSelectionStateCha
 
             @Override
             protected int getBindingVariableId() {
-                return BR.ingredient;
+                return BR.groceryIngredient;
             }
 
             @Override
