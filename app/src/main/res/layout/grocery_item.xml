@@ -6,7 +6,7 @@
 
     <data>
         <import type="android.view.View"/>
-        <variable name="ingredient" type="com.flauschcode.broccoli.recipe.ingredients.Ingredient" />
+        <variable name="groceryIngredient" type="com.flauschcode.broccoli.groceryList.GroceryIngredient" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -26,7 +26,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             android:textStyle="bold"
-            android:text="@{ingredient.quantity}"/>
+            android:text="@{groceryIngredient.ingredient.quantity}"/>
 
         <TextView
             android:id="@+id/ingredient_text"
@@ -38,7 +38,7 @@
             app:layout_constraintHorizontal_chainStyle="packed"
             app:layout_constraintStart_toEndOf="@id/ingredient_quantity"
             app:layout_constraintTop_toTopOf="parent"
-            android:text="@{ingredient.text}"/>
+            android:text="@{groceryIngredient.ingredient.text}"/>
 
         <ImageView
             android:id="@+id/ingredient_seasonal_icon"
@@ -46,7 +46,7 @@
             android:layout_height="wrap_content"
             android:contentDescription="@string/seasonal_accessibility"
             android:src="@drawable/ic_eco_24"
-            android:visibility="@{ingredient.seasonal ? View.VISIBLE : View.GONE}"
+            android:visibility="@{groceryIngredient.ingredient.seasonal ? View.VISIBLE : View.GONE}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_chainStyle="packed"

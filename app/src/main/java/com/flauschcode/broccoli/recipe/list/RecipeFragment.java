@@ -20,6 +20,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -301,6 +302,14 @@ public class RecipeFragment extends Fragment implements OnSelectionStateChangeLi
             groceryIngredients.forEach(groceryIngredient ->
                     groceryIngredientRepository.insertOrUpdate(groceryIngredient)
             );
+
+            //groceryIngredientRepository.findAll().observe(getViewLifecycleOwner(), new Observer<List<GroceryIngredient>>() {
+//
+            //    @Override
+            //    public void onChanged(List<GroceryIngredient> groceryIngredients) {
+            //        int bla = 1+2;
+            //    }
+            //});
 
             Toast.makeText(getContext(), "Added to grocery list: " + groceryIngredients.size(), Toast.LENGTH_LONG).show();
             return true;
