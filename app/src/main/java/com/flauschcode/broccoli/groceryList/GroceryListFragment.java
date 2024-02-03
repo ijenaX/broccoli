@@ -18,7 +18,6 @@ import com.flauschcode.broccoli.BR;
 import com.flauschcode.broccoli.OnSelectionStateChangeListener;
 import com.flauschcode.broccoli.R;
 import com.flauschcode.broccoli.SelectableRecyclerViewAdapter;
-import com.flauschcode.broccoli.recipe.list.RecipeViewModel;
 
 import java.util.List;
 
@@ -37,7 +36,7 @@ public class GroceryListFragment extends Fragment implements OnSelectionStateCha
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
-        //AndroidSupportInjection.inject(this);
+        AndroidSupportInjection.inject(this);
 
         View root = inflater.inflate(R.layout.fragment_grocery_list, container, false);
 
