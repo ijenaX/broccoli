@@ -64,7 +64,7 @@
             android:clickable="false"
             android:focusable="false"
             android:padding="8dp"
-            android:visibility="visible"
+            android:visibility="gone"
             app:layout_constraintStart_toEndOf="@+id/ingredient_seasonal_icon"
             app:layout_constraintTop_toTopOf="parent" />
 
