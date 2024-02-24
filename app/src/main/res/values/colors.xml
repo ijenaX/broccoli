@@ -5,6 +5,7 @@
     <color name="green_500">#4caf50</color>
     <color name="green_200">#a5d6a7</color>
 
+    <color name="text_black">#000000</color>
     <color name="gray_600">#757575</color>
     <color name="gray_400">#bdbdbd</color>
 </resources>

@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -64,21 +65,29 @@ public class GroceryListFragment extends Fragment implements OnSelectionStateCha
 
                 if (viewHolder != null) {
                     TextView quantityTextView = viewHolder.itemView.findViewById(R.id.ingredient_quantity);
-                    TextView textTextView = viewHolder.itemView.findViewById(R.id.ingredient_quantity);
+                    TextView textTextView = viewHolder.itemView.findViewById(R.id.ingredient_text);
 
                     if (textTextView == null) { return; }
 
+                    int greyColor = ContextCompat.getColor(viewHolder.itemView.getContext(), R.color.gray_600);
+                    int normalColor = ContextCompat.getColor(viewHolder.itemView.getContext(), R.color.text_black);
+
                     if (item.isInCart()) {
-                        quantityTextView.setPaintFlags(~Paint.STRIKE_THRU_TEXT_FLAG);
-                        textTextView.setPaintFlags(~Paint.STRIKE_THRU_TEXT_FLAG);
+                        quantityTextView.setPaintFlags(quantityTextView.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
+                        textTextView.setPaintFlags(textTextView.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
+                        quantityTextView.setTextColor(normalColor);
+                        textTextView.setTextColor(normalColor);
                         item.setInCart(false);
                     } else {
-                        quantityTextView.setPaintFlags(Paint.STRIKE_THRU_TEXT_FLAG);
-                        textTextView.setPaintFlags(Paint.STRIKE_THRU_TEXT_FLAG);
+                        quantityTextView.setPaintFlags(quantityTextView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                        textTextView.setPaintFlags(textTextView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                        quantityTextView.setTextColor(greyColor);
+                        textTextView.setTextColor(greyColor);
                         item.setInCart(true);
                     }
                 }
             }
+
 
             @Override
             protected void onItemLongClick(GroceryIngredient item, int position) {
