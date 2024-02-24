@@ -65,7 +65,7 @@ public class RecipeFragment extends Fragment implements OnSelectionStateChangeLi
     private SearchView searchView;
     private Spinner spinner;
     private Chip seasonalIngredientChip;
-    private List<Recipe> selectedRecipes = new ArrayList<>();;
+    private List<Recipe> selectedRecipes = new ArrayList<>();
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
