@@ -3,6 +3,7 @@ package com.flauschcode.broccoli.groceryList;
 import android.content.Intent;
 import android.graphics.Paint;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,6 +23,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.flauschcode.broccoli.BR;
 import com.flauschcode.broccoli.OnSelectionStateChangeListener;
 import com.flauschcode.broccoli.R;
+import com.flauschcode.broccoli.RecyclerViewAdapter;
 import com.flauschcode.broccoli.SelectableRecyclerViewAdapter;
 import com.flauschcode.broccoli.recipe.Recipe;
 import com.flauschcode.broccoli.recipe.details.RecipeDetailsActivity;
@@ -70,16 +72,21 @@ public class GroceryListFragment extends Fragment implements OnSelectionStateCha
             @Override
             protected void onItemClick(GroceryIngredient item, int position) {
                 if (selectedGroceries.isEmpty()) {
-                    toggleStrikeThrough(item, position, recyclerView);
+                    toggleInCart(item);
+                    updateStrikeThrough(item, position, recyclerView);
                 } else {
+                    Toast.makeText(getContext(), "Toggling selection. Position: " + position, Toast.LENGTH_SHORT).show();
                     toggleSelection(position);
+                    updateStrikeThrough(item, position, recyclerView);
                 }
             }
 
 
             @Override
             protected void onItemLongClick(GroceryIngredient item, int position) {
+                Toast.makeText(getContext(), "Toggling selection. Position: " + position, Toast.LENGTH_SHORT).show();
                 toggleSelection(position);
+                updateStrikeThrough(item, position, recyclerView);
             }
 
             @Override
@@ -113,9 +120,17 @@ public class GroceryListFragment extends Fragment implements OnSelectionStateCha
         });
     }
 
-    private void toggleStrikeThrough(GroceryIngredient item, int position, RecyclerView recyclerView) {
+    private void toggleInCart(GroceryIngredient item) {
+        Log.d("GroceryListFragment", "pre toggleInCart() isInCart = " + item.isInCart());
+        item.setInCart(!item.isInCart());
+        Log.d("GroceryListFragment", "post toggleInCart() isInCart = " + item.isInCart());
+    }
+
+    private void updateStrikeThrough(GroceryIngredient item, int position, RecyclerView recyclerView) {
         SelectableRecyclerViewAdapter.Holder viewHolder = (SelectableRecyclerViewAdapter.Holder) recyclerView.findViewHolderForAdapterPosition(position);
 
+
+        Log.d("GroceryListFragment", "updateStrikeThrough() isInCart = " + item.isInCart());
         if (viewHolder != null) {
             TextView quantity = viewHolder.itemView.findViewById(R.id.ingredient_quantity);
             TextView ingredient = viewHolder.itemView.findViewById(R.id.ingredient_text);
@@ -125,18 +140,16 @@ public class GroceryListFragment extends Fragment implements OnSelectionStateCha
             int greyColor = ContextCompat.getColor(viewHolder.itemView.getContext(), R.color.gray_600);
             int normalColor = ContextCompat.getColor(viewHolder.itemView.getContext(), R.color.text_black);
 
-            if (item.isInCart()) {
+            if (!item.isInCart()) {
                 quantity.setPaintFlags(quantity.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
                 ingredient.setPaintFlags(ingredient.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
                 quantity.setTextColor(normalColor);
                 ingredient.setTextColor(normalColor);
-                item.setInCart(false);
             } else {
                 quantity.setPaintFlags(quantity.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
                 ingredient.setPaintFlags(ingredient.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
                 quantity.setTextColor(greyColor);
                 ingredient.setTextColor(greyColor);
-                item.setInCart(true);
             }
         }
     }
