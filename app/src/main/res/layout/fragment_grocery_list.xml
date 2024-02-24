@@ -6,6 +6,37 @@
     android:layout_height="match_parent"
     android:theme="@style/Theme.Broccoli">
 
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/ThemeOverlay.Broccoli.AppBarOverlay">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar_groceries"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorSecondaryToolbar"
+            app:popupTheme="@style/ThemeOverlay.Broccoli.PopupOverlay">
+
+            <Spinner
+                android:id="@+id/spinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="@dimen/min_height_for_accessibility"
+                android:contentDescription="@string/categories"
+                app:popupTheme="@style/ThemeOverlay.Broccoli.PopupOverlay" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip"
+                style="@style/Widget.MaterialComponents.Chip.Entry"
+                app:ensureMinTouchTargetSize="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </androidx.appcompat.widget.Toolbar>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
     <TextView
         android:id="@+id/text_view"
         android:layout_width="match_parent"
