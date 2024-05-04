@@ -225,6 +225,9 @@
     <string name="open_source_licenses_text">Détails de la licence pour les logiciels open source</string>
     <string name="polish">Polonais</string>
     <string name="chinese">Chinois</string>
+    <string name="turkish">Turc</string>
+    <string name="serbian_latin">Serbe (latin)</string>
+    <string name="hebrew">Hébreu</string>
     <string name="title_grocery_list">Grocery List</string>
     <string name="empty_grocery_list_prompt">Wunderbare Einkaufsliste</string>
 </resources>
